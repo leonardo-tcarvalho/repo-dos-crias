@@ -188,6 +188,9 @@ class Tower:
         self.cost = cost
         self.cooldown = 60
         self.timer = 0
+        self.image = TOWER_IMAGE_1
+        self.angle = 0
+        self.flipped = False
 
     def attack(self, enemies):
         if self.timer == 0:
@@ -196,13 +199,25 @@ class Tower:
                 if distance <= self.range:
                     enemy.health -= self.damage[enemy.difficulty - 1] * 30
                     self.timer = self.cooldown
+                    # Calculate angle to rotate the tower
+                    dx, dy = enemy.x - self.x, enemy.y - self.y
+                    self.angle = math.degrees(math.atan2(-dy, dx))  # Negative dy to correct the rotation direction
+                    # Flip the image if it is upside down
+                    if 90 < abs(self.angle) < 270:
+                        if not self.flipped:
+                            self.image = pygame.transform.flip(self.image, False, True)
+                            self.flipped = True
+                    else:
+                        if self.flipped:
+                            self.image = pygame.transform.flip(self.image, False, True)
+                            self.flipped = False
                     return True
         return False
 
     def draw(self):
-        tower_rect = TOWER_IMAGE_1.get_rect(center=(self.x, self.y))
-        SCREEN.blit(TOWER_IMAGE_1, tower_rect)  # Desenha a imagem da torre na posição correta
-        
+        rotated_image = pygame.transform.rotate(self.image, self.angle)
+        tower_rect = rotated_image.get_rect(center=(self.x, self.y))
+        SCREEN.blit(rotated_image, tower_rect)  # Desenha a imagem da torre na posição correta
         
         # Desenha o alcance da torre
         pygame.draw.circle(SCREEN, WHITE, (self.x, self.y), self.range, 1)
@@ -255,6 +270,19 @@ def is_cell_free(x, y):
     for enemy in enemies:
         if enemy.x // CELL_SIZE == x and enemy.y // CELL_SIZE == y:
             return False
+    for tower in towers:
+        if tower.x // CELL_SIZE == x and tower.y // CELL_SIZE == y:
+            return False
+    path = pathLevels.get(current_level, [])
+    for i in range(len(path) - 1):
+        start_x, start_y = path[i]
+        end_x, end_y = path[i + 1]
+        if start_x == end_x:  # Vertical path
+            if start_x // CELL_SIZE == x and min(start_y, end_y) // CELL_SIZE <= y <= max(start_y, end_y) // CELL_SIZE:
+                return False
+        elif start_y == end_y:  # Horizontal path
+            if start_y // CELL_SIZE == y and min(start_x, end_x) // CELL_SIZE <= x <= max(start_x, end_x) // CELL_SIZE:
+                return False
     return True
 
 # Inicializar lista de inimigos, fila de inimigos e torres
