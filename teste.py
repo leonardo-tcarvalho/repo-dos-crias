@@ -196,7 +196,7 @@ class Tower:
         self.x = x
         self.y = y
         self.range = 100
-        self.damage = {50: [0.1, 0.05, 0.01], 100: [0.25, 0.15, 0.05], 200: [0.5, 0.35, 0.15]}[cost]
+        self.damage = {50: [0.85, 0.425, 0.212], 100: [1.7, 0.85, 0.425], 200: [3.4, 1.7, 0.85]}[cost]
         self.cost = cost
         self.cooldown = 60
         self.timer = 0
@@ -321,6 +321,8 @@ def draw_background():
         elif start_y == end_y:  # Caminho horizontal
             for x in range(min(start_x, end_x), max(start_x, end_x) + CELL_SIZE, CELL_SIZE):
                 SCREEN.blit(PATH_BACKGROUND_IMAGE, (x - CELL_SIZE // 2, start_y - CELL_SIZE // 2))
+    for x, y in path:
+        SCREEN.blit(PATH_BACKGROUND_IMAGE, (x - CELL_SIZE // 2, y - CELL_SIZE // 2))
 
 # Inicializar lista de inimigos, fila de inimigos e torres
 enemies = []
