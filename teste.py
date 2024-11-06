@@ -23,6 +23,8 @@ ROAD_COLOR = (0, 0, 0)
 BLUE = (0, 0, 255)     # Torre tipo 1
 YELLOW = (255, 255, 0) # Torre tipo 2
 PURPLE = (128, 0, 128) # Torre tipo 3
+CYAN = (0, 255, 255)   # Torre tipo 4
+MAGENTA = (255, 0, 255) # Torre tipo 5
 
 # Imagens
 TOWER_IMAGE_1 = pygame.image.load("tower-1.png")
@@ -49,7 +51,7 @@ player_money = 10000
 tower_costs = [50, 100, 200]
 reward_enemy = [10, 25, 100]
 points_enemy = [20, 100, 200]
-lives = 2000
+lives = 3
 available_towers = float('inf')
 current_level = 1  # Inicializa o nível atual como 1
 
@@ -75,49 +77,34 @@ pathLevels = {
         (18 * CELL_SIZE + 25, 3 * CELL_SIZE + 25),
     ],
     2: [
-        (1 * CELL_SIZE + 25, 0 * CELL_SIZE + 25), 
-        (1 * CELL_SIZE + 25, 4 * CELL_SIZE + 25),
-        (10 * CELL_SIZE + 25, 4 * CELL_SIZE + 25),
-        (10 * CELL_SIZE + 25, 1 * CELL_SIZE + 25),
-        (16 * CELL_SIZE + 25, 1 * CELL_SIZE + 25), 
-        (16 * CELL_SIZE + 25, 7 * CELL_SIZE + 25),
-        (7 * CELL_SIZE + 25, 7 * CELL_SIZE + 25), 
-        (7 * CELL_SIZE + 25, 10 * CELL_SIZE + 25),
-        (1 * CELL_SIZE + 25, 10 * CELL_SIZE + 25), 
-        (1 * CELL_SIZE + 25, 13 * CELL_SIZE + 25),
-        (17 * CELL_SIZE + 25, 13 * CELL_SIZE + 25), 
-        (17 * CELL_SIZE + 25, 17 * CELL_SIZE + 25),
-        (17 * CELL_SIZE + 25, HEIGHT + 0)
+        (0 * CELL_SIZE, 4 * CELL_SIZE + 25), 
+        (12 * CELL_SIZE + 25, 4 * CELL_SIZE + 25),
+        (12 * CELL_SIZE + 25, 9 * CELL_SIZE + 25),
+        (6 * CELL_SIZE + 25, 9 * CELL_SIZE + 25),
+        (6 * CELL_SIZE + 25, 14 * CELL_SIZE + 25), 
+        (16 * CELL_SIZE + 25, 14 * CELL_SIZE + 25),
+        (16 * CELL_SIZE + 25, 3 * CELL_SIZE + 25), 
+        (18 * CELL_SIZE + 25, 3 * CELL_SIZE + 25),
     ],
     3: [
-        (1 * CELL_SIZE + 25, 0 * CELL_SIZE + 25), 
-        (1 * CELL_SIZE + 25, 4 * CELL_SIZE + 25),
-        (10 * CELL_SIZE + 25, 4 * CELL_SIZE + 25),
-        (10 * CELL_SIZE + 25, 1 * CELL_SIZE + 25),
-        (16 * CELL_SIZE + 25, 1 * CELL_SIZE + 25), 
-        (16 * CELL_SIZE + 25, 7 * CELL_SIZE + 25),
-        (7 * CELL_SIZE + 25, 7 * CELL_SIZE + 25), 
-        (7 * CELL_SIZE + 25, 10 * CELL_SIZE + 25),
-        (1 * CELL_SIZE + 25, 10 * CELL_SIZE + 25), 
-        (1 * CELL_SIZE + 25, 13 * CELL_SIZE + 25),
-        (17 * CELL_SIZE + 25, 13 * CELL_SIZE + 25), 
-        (17 * CELL_SIZE + 25, 17 * CELL_SIZE + 25),
-        (17 * CELL_SIZE + 25, HEIGHT + 0)
+        (0 * CELL_SIZE, 4 * CELL_SIZE + 25), 
+        (12 * CELL_SIZE + 25, 4 * CELL_SIZE + 25),
+        (12 * CELL_SIZE + 25, 9 * CELL_SIZE + 25),
+        (6 * CELL_SIZE + 25, 9 * CELL_SIZE + 25),
+        (6 * CELL_SIZE + 25, 14 * CELL_SIZE + 25), 
+        (16 * CELL_SIZE + 25, 14 * CELL_SIZE + 25),
+        (16 * CELL_SIZE + 25, 3 * CELL_SIZE + 25), 
+        (18 * CELL_SIZE + 25, 3 * CELL_SIZE + 25),
     ],
     4: [
-        (1 * CELL_SIZE + 25, 0 * CELL_SIZE + 25), 
-        (1 * CELL_SIZE + 25, 4 * CELL_SIZE + 25),
-        (10 * CELL_SIZE + 25, 4 * CELL_SIZE + 25),
-        (10 * CELL_SIZE + 25, 1 * CELL_SIZE + 25),
-        (16 * CELL_SIZE + 25, 1 * CELL_SIZE + 25), 
-        (16 * CELL_SIZE + 25, 7 * CELL_SIZE + 25),
-        (7 * CELL_SIZE + 25, 7 * CELL_SIZE + 25), 
-        (7 * CELL_SIZE + 25, 10 * CELL_SIZE + 25),
-        (1 * CELL_SIZE + 25, 10 * CELL_SIZE + 25), 
-        (1 * CELL_SIZE + 25, 13 * CELL_SIZE + 25),
-        (17 * CELL_SIZE + 25, 13 * CELL_SIZE + 25), 
-        (17 * CELL_SIZE + 25, 17 * CELL_SIZE + 25),
-        (17 * CELL_SIZE + 25, HEIGHT + 0)
+        (0 * CELL_SIZE, 4 * CELL_SIZE + 25), 
+        (12 * CELL_SIZE + 25, 4 * CELL_SIZE + 25),
+        (12 * CELL_SIZE + 25, 9 * CELL_SIZE + 25),
+        (6 * CELL_SIZE + 25, 9 * CELL_SIZE + 25),
+        (6 * CELL_SIZE + 25, 14 * CELL_SIZE + 25), 
+        (16 * CELL_SIZE + 25, 14 * CELL_SIZE + 25),
+        (16 * CELL_SIZE + 25, 3 * CELL_SIZE + 25), 
+        (18 * CELL_SIZE + 25, 3 * CELL_SIZE + 25),
     ],
     5: [
         (1 * CELL_SIZE + 25, 0 * CELL_SIZE + 25), 
@@ -178,6 +165,31 @@ class Enemy:
         pygame.draw.rect(SCREEN, WHITE, (self.x - health_bar_length / 2, self.y - 15, health_bar_length, 5))
         pygame.draw.rect(SCREEN, (0, 255, 0), (self.x - health_bar_length / 2, self.y - 15, health_bar_length * health_ratio, 5))
 
+# Classe Projectile
+class Projectile:
+    def __init__(self, x, y, target, damage, color):
+        self.x = x
+        self.y = y
+        self.target = target
+        self.damage = damage
+        self.speed = 5
+        self.radius = 5
+        self.color = color
+
+    def move(self):
+        dx, dy = self.target.x - self.x, self.target.y - self.y
+        distance = math.sqrt(dx ** 2 + dy ** 2)
+        if distance < self.speed:
+            self.target.health -= self.damage
+            return True
+        else:
+            self.x += dx / distance * self.speed
+            self.y += dy / distance * self.speed
+            return False
+
+    def draw(self):
+        pygame.draw.circle(SCREEN, self.color, (int(self.x), int(self.y)), self.radius)
+
 # Classe Torre
 class Tower:
     def __init__(self, x, y, cost):
@@ -191,13 +203,15 @@ class Tower:
         self.image = TOWER_IMAGE_1
         self.angle = 0
         self.flipped = False
+        self.projectiles = []
+        self.projectile_color = BLUE if cost == 50 else MAGENTA if cost == 100 else YELLOW if cost == 200 else CYAN
 
     def attack(self, enemies):
         if self.timer == 0:
             for enemy in enemies:
                 distance = math.sqrt((self.x - enemy.x) ** 2 + (self.y - enemy.y) ** 2)
                 if distance <= self.range:
-                    enemy.health -= self.damage[enemy.difficulty - 1] * 30
+                    self.projectiles.append(Projectile(self.x, self.y, enemy, self.damage[enemy.difficulty - 1] * 30, self.projectile_color))
                     self.timer = self.cooldown
                     # Calculate angle to rotate the tower
                     dx, dy = enemy.x - self.x, enemy.y - self.y
@@ -221,12 +235,20 @@ class Tower:
         
         # Desenha o alcance da torre
         pygame.draw.circle(SCREEN, WHITE, (self.x, self.y), self.range, 1)
+        for projectile in self.projectiles:
+            projectile.draw()
 
     def update(self):
         if self.timer > 0:
             self.timer -= 1
+        self.projectiles = [p for p in self.projectiles if not p.move()]
 
 # Funções auxiliares
+BACKGROUND_IMAGE = pygame.image.load("backgroundTowers.png")
+BACKGROUND_IMAGE = pygame.transform.scale(BACKGROUND_IMAGE, (CELL_SIZE, CELL_SIZE))
+PATH_BACKGROUND_IMAGE = pygame.image.load("backgroundPath.png")
+PATH_BACKGROUND_IMAGE = pygame.transform.scale(PATH_BACKGROUND_IMAGE, (CELL_SIZE, CELL_SIZE))
+
 def draw_menu():
     menu_width = 200
     pygame.draw.rect(SCREEN, GRAY, (WIDTH - menu_width, 0, menu_width, HEIGHT))
@@ -237,7 +259,7 @@ def draw_menu():
     SCREEN.blit(lives_text, (WIDTH - menu_width + 10, 50))
 
     for i, cost in enumerate(tower_costs):
-        color = BLUE if cost == 50 else YELLOW if cost == 100 else PURPLE
+        color = BLUE if cost == 50 else MAGENTA if cost == 100 else YELLOW if cost == 200 else CYAN
         tower_image = TOWER_IMAGE_1  # Usando a mesma imagem dos inimigos por enquanto
         tower_rect = tower_image.get_rect(center=(WIDTH - menu_width + 50, 150 + i * 100))
         pygame.draw.rect(SCREEN, WHITE, tower_rect.inflate(10, 10), border_radius=5)  # Desenha um retângulo ao redor da torre
@@ -285,6 +307,21 @@ def is_cell_free(x, y):
                 return False
     return True
 
+def draw_background():
+    for x in range(0, WIDTH - 200, CELL_SIZE):  # Ajusta a largura da grade para 18 células
+        for y in range(0, HEIGHT, CELL_SIZE):
+            SCREEN.blit(BACKGROUND_IMAGE, (x, y))
+    path = pathLevels.get(current_level, [])
+    for i in range(len(path) - 1):
+        start_x, start_y = path[i]
+        end_x, end_y = path[i + 1]
+        if start_x == end_x:  # Vertical path
+            for y in range(min(start_y, end_y), max(start_y, end_y) + CELL_SIZE, CELL_SIZE):
+                SCREEN.blit(PATH_BACKGROUND_IMAGE, (start_x - 25, y - 25))
+        elif start_y == end_y:  # Horizontal path
+            for x in range(min(start_x, end_x), max(start_x, end_x) + CELL_SIZE, CELL_SIZE):
+                SCREEN.blit(PATH_BACKGROUND_IMAGE, (x - 25, start_y - 25))
+
 # Inicializar lista de inimigos, fila de inimigos e torres
 enemies = []
 enemy_queue = []
@@ -303,10 +340,11 @@ running = True
 generate_enemies()  # Gerar inimigos ao iniciar o jogo
 
 while running:
-    SCREEN.fill(DARK_BROWN)
+    draw_background()  # Desenha o fundo das células das torres
     path = pathLevels.get(current_level, [])  # Atualiza o caminho para o nível atual
-    for i in range(len(path) - 1):
-        pygame.draw.line(SCREEN, ROAD_COLOR, path[i], path[i + 1], 10)
+    # Remova a linha preta no caminho do path
+    # for i in range(len(path) - 1):
+    #     pygame.draw.line(SCREEN, ROAD_COLOR, path[i], path[i + 1], 10)
 
     # Desenhar a grade e verificar eventos
     for x in range(0, WIDTH - 200, CELL_SIZE):  # Ajusta a largura da grade para 18 células
