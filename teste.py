@@ -315,12 +315,12 @@ def draw_background():
     for i in range(len(path) - 1):
         start_x, start_y = path[i]
         end_x, end_y = path[i + 1]
-        if start_x == end_x:  # Vertical path
+        if start_x == end_x:  # Caminho vertical
             for y in range(min(start_y, end_y), max(start_y, end_y) + CELL_SIZE, CELL_SIZE):
-                SCREEN.blit(PATH_BACKGROUND_IMAGE, (start_x - 25, y - 25))
-        elif start_y == end_y:  # Horizontal path
+                SCREEN.blit(PATH_BACKGROUND_IMAGE, (start_x - CELL_SIZE // 2, y - CELL_SIZE // 2))
+        elif start_y == end_y:  # Caminho horizontal
             for x in range(min(start_x, end_x), max(start_x, end_x) + CELL_SIZE, CELL_SIZE):
-                SCREEN.blit(PATH_BACKGROUND_IMAGE, (x - 25, start_y - 25))
+                SCREEN.blit(PATH_BACKGROUND_IMAGE, (x - CELL_SIZE // 2, start_y - CELL_SIZE // 2))
 
 # Inicializar lista de inimigos, fila de inimigos e torres
 enemies = []
