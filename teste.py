@@ -261,11 +261,11 @@ def draw_menu():
     for i, cost in enumerate(tower_costs):
         color = BLUE if cost == 50 else MAGENTA if cost == 100 else YELLOW if cost == 200 else CYAN
         tower_image = TOWER_IMAGE_1  # Usando a mesma imagem dos inimigos por enquanto
-        tower_rect = tower_image.get_rect(center=(WIDTH - menu_width + 50, 150 + i * 100))
+        tower_rect = tower_image.get_rect(center=(WIDTH - menu_width // 1.3, 150 + i * 100))
         pygame.draw.rect(SCREEN, WHITE, tower_rect.inflate(10, 10), border_radius=5)  # Desenha um retângulo ao redor da torre
         SCREEN.blit(tower_image, tower_rect)
         cost_text = font.render(str(cost), True, BLACK)
-        SCREEN.blit(cost_text, (WIDTH - menu_width + 100, 140 + i * 100))
+        SCREEN.blit(cost_text, (tower_rect.right + 20, tower_rect.centery - cost_text.get_height() // 2))
 
 def generate_enemies():
     f, m, d = qtdEnemysPerlevel[current_level]
@@ -361,7 +361,8 @@ while running:
 
             if mouse_x > WIDTH - 200:
                 for i, cost in enumerate(tower_costs):
-                    if 150 + i * 100 < mouse_y < 150 + (i + 1) * 100 and player_money >= cost:
+                    tower_rect = pygame.Rect(WIDTH - 200 + 50 - 15, 150 + i * 100 - 15, 30, 30)
+                    if tower_rect.collidepoint(mouse_x, mouse_y) and player_money >= cost:
                         dragging_tower = True
                         dragged_tower_cost = cost
                         dragged_tower_image = TOWER_IMAGE_1  # Usando a mesma imagem dos inimigos por enquanto
