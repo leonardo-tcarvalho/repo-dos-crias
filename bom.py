@@ -190,7 +190,7 @@ class Tower:
         self.x = x
         self.y = y
         self.range = 100
-        self.damage = {50: [0.42,5, 0.212, 0.111], 100: [0.85, 0.425, 0.212], 200: [1.7, 0.85, 0.425]}[cost]
+        self.damage = {50: [0.85, 0.425, 0.212], 100: [1.7, 0.85, 0.425], 200: [3.4, 1.7, 0.85]}[cost]
         self.cost = cost
         self.cooldown = 60
         self.timer = 0
@@ -267,13 +267,9 @@ def generate_enemies():
     player_money = 200  # Reset player money at the start of each round
     f, m, d = qtdEnemysPerlevel[current_level]
     difficulty_counts = [(1, f), (2, m), (3, d)]
-    enemy_list = []
     for difficulty, count in difficulty_counts:
         for _ in range(count):
-            enemy_list.append(Enemy(pathLevels[current_level], difficulty))
-    random.shuffle(enemy_list)  # Shuffle the enemies to randomize their order
-    for enemy in enemy_list:
-        enemy_queue.append(enemy)
+            enemy_queue.append(Enemy(pathLevels[current_level], difficulty))
 
 def draw_next_level_screen(level):
     SCREEN.fill(BLACK)
