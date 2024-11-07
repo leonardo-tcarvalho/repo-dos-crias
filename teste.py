@@ -43,7 +43,7 @@ ENEMY_IMAGE_3 = pygame.transform.scale(ENEMY_IMAGE_3, (50, 50))
 
 # Pontos e custos
 player_points = 0
-player_money = 200
+player_money = 300
 reward_enemy = [50, 100, 150]  # Update rewards for killing enemies
 tower_costs = [50, 100, 200]
 points_enemy = [20, 100, 200]
@@ -264,7 +264,7 @@ def draw_menu():
 
 def generate_enemies():
     global player_money  # Add this line to modify the global variable
-    player_money = 200  # Reset player money at the start of each round
+    player_money = 300  # Reset player money at the start of each round
     f, m, d = qtdEnemysPerlevel[current_level]
     difficulty_counts = [(1, f), (2, m), (3, d)]
     enemy_list = []
