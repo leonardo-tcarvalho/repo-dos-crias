@@ -44,9 +44,9 @@ ENEMY_IMAGE_3 = pygame.transform.scale(ENEMY_IMAGE_3, (50, 50))
 # Pontos e custos
 player_points = 0
 player_money = 300
-reward_enemy = [50, 100, 150]  # Update rewards for killing enemies
+reward_enemy = [50, 100, 200]  # Update rewards for killing enemies
 tower_costs = [50, 100, 200]
-points_enemy = [20, 100, 200]
+points_enemy = [50, 100, 200]
 available_towers = float('inf')
 current_level = 1  # Inicializa o nível atual como 1
 
@@ -190,7 +190,7 @@ class Tower:
         self.x = x
         self.y = y
         self.range = 100
-        self.damage = {50: [0.42,5, 0.212, 0.111], 100: [0.85, 0.425, 0.212], 200: [1.7, 0.85, 0.425]}[cost]
+        self.damage = {50: [0.42,5, 0.212, 0.111], 100: [1.2, 0.625, 0.312], 200: [1.7, 0.95, 0.65]}[cost]
         self.cost = cost
         self.cooldown = 60
         self.timer = 0
@@ -328,10 +328,12 @@ def draw_background():
 def draw_start_screen():
     SCREEN.fill(BLACK)
     font = pygame.font.Font(None, 74)
-    text = font.render("Pressione ENTER para iniciar", True, WHITE)
+    text = font.render("JOGAR", True, WHITE)
     text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+    pygame.draw.rect(SCREEN, RED, text_rect.inflate(20, 20))  # Desenha um retângulo ao redor do texto
     SCREEN.blit(text, text_rect)
     pygame.display.flip()
+    return text_rect  # Retorna o retângulo do botão
 
 def draw_game_over_screen():
     SCREEN.fill(BLACK)
@@ -364,12 +366,13 @@ game_over = False
 
 while running:
     if not game_started:
-        draw_start_screen()
+        start_button_rect = draw_start_screen()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                if start_button_rect.collidepoint(mouse_x, mouse_y):
                     game_started = True
                     generate_enemies()  # Gerar inimigos ao iniciar o jogo
     elif game_over:
