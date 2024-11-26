@@ -82,7 +82,7 @@ pathLevels = {
         (12 * CELL_SIZE + 25, 4 * CELL_SIZE + 25),
         (12 * CELL_SIZE + 25, 9 * CELL_SIZE + 25), 
         (14 * CELL_SIZE + 25, 9 * CELL_SIZE + 25),
-        (14 * CELL_SIZE + 25, 16 * CELL_SIZE + 25), 
+        (14 * CELL_SIZE + 25, 15 * CELL_SIZE + 25), 
     ],
     2: [
         (-1 * CELL_SIZE + 25, 4 * CELL_SIZE + 25), 
@@ -186,26 +186,27 @@ class Enemy:
             if self.effect_timer == 0:
                 self.effect_index = (self.effect_index + 1) % len(EFFECT_IMAGES)
 
-    def take_damage(self, damage):
+    def take_damage(self, damage, effect_index):
         self.health -= damage
         self.effect_timer = 5  # Duração do efeito de dano
-        self.effect_index = 0  # Reinicia o índice do efeito
+        self.effect_index = effect_index  # Define o índice do efeito
 
 # Classe Projectile
 class Projectile:
-    def __init__(self, x, y, target, damage, image):
+    def __init__(self, x, y, target, damage, image, effect_index):
         self.x = x
         self.y = y
         self.target = target
         self.damage = damage
         self.speed = 5
         self.image = image
+        self.effect_index = effect_index
 
     def move(self):
         dx, dy = self.target.x - self.x, self.target.y - self.y
         distance = math.sqrt(dx ** 2 + dy ** 2)
         if distance < self.speed:
-            self.target.take_damage(self.damage)
+            self.target.take_damage(self.damage, self.effect_index)
             return True
         else:
             self.x += dx / distance * self.speed
@@ -222,7 +223,7 @@ class Tower:
         self.x = x
         self.y = y
         self.range = 100
-        self.damage = {50: [0.42,5, 0.212, 0.111], 100: [1.2, 0.625, 0.312], 200: [1.7, 0.95, 0.65]}[cost]
+        self.damage = {50: [0.425, 0.212, 0.111], 100: [1.2, 0.625, 0.312], 200: [1.7, 0.95, 0.65]}[cost]
         self.cost = cost
         self.cooldown = 60
         self.timer = 0
@@ -231,13 +232,14 @@ class Tower:
         self.flipped = False
         self.projectiles = []
         self.projectile_image = BULLET_IMAGE_1 if cost == 50 else BULLET_IMAGE_2 if cost == 100 else BULLET_IMAGE_3
+        self.effect_index = 0 if cost == 50 else 1 if cost == 100 else 2
 
     def attack(self, enemies):
         if self.timer == 0:
             for enemy in enemies:
                 distance = math.sqrt((self.x - enemy.x) ** 2 + (self.y - enemy.y) ** 2)
                 if distance <= self.range:
-                    self.projectiles.append(Projectile(self.x, self.y, enemy, self.damage[enemy.difficulty - 1] * 30, self.projectile_image))
+                    self.projectiles.append(Projectile(self.x, self.y, enemy, self.damage[enemy.difficulty - 1] * 30, self.projectile_image, self.effect_index))
                     self.timer = self.cooldown
                     # Calculate angle to rotate the tower
                     dx, dy = enemy.x - self.x, enemy.y - self.y
@@ -259,8 +261,6 @@ class Tower:
         tower_rect = rotated_image.get_rect(center=(self.x, self.y))
         SCREEN.blit(rotated_image, tower_rect)  # Desenha a imagem da torre na posição correta
         
-        # Desenha o alcance da torre
-        pygame.draw.circle(SCREEN, WHITE, (self.x, self.y), self.range, 1)
         for projectile in self.projectiles:
             projectile.draw()
 
