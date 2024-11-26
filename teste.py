@@ -365,6 +365,11 @@ def draw_background():
 
 def draw_start_screen():
     SCREEN.fill(BLACK)
+    enemy_images = [ENEMY_IMAGE_1, ENEMY_IMAGE_2, ENEMY_IMAGE_3]
+    for x in range(0, WIDTH, 50):
+        for y in range(0, HEIGHT, 50):
+            enemy_image = random.choice(enemy_images)
+            SCREEN.blit(enemy_image, (x, y))
     font = pygame.font.Font(None, 74)
     text = font.render("JOGAR", True, WHITE)
     text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
@@ -375,14 +380,21 @@ def draw_start_screen():
 
 def draw_game_over_screen():
     SCREEN.fill(BLACK)
-    font = pygame.font.Font(None, 74)
-    text = font.render("GAME OVER", True, RED)
-    text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
-    SCREEN.blit(text, text_rect)
-    text = font.render("Pressione R para reiniciar", True, WHITE)
-    text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 50))
-    SCREEN.blit(text, text_rect)
+    font_main = pygame.font.Font(None, 74)
+    font_sub = pygame.font.Font(None, 24)  # 33% do tamanho da frase principal
+    phrases = [
+        "TENTA DENOVO OUTRO DIA SEU RUIM",
+        "É MAIS FACIL DESINSTALAR O JOGO",
+        "TÁ JOGANDO COM O PÉ AMIGÃO?"
+    ]
+    main_text = font_main.render("VOCÊ PERDEU", True, RED)
+    sub_text = font_sub.render(random.choice(phrases), True, RED)
+    main_text_rect = main_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
+    sub_text_rect = sub_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 20))
+    SCREEN.blit(main_text, main_text_rect)
+    SCREEN.blit(sub_text, sub_text_rect)
     pygame.display.flip()
+    pygame.time.wait(3000)  # Espera 3 segundos
 
 # Inicializar lista de inimigos, fila de inimigos e torres
 enemies = []
@@ -415,20 +427,15 @@ while running:
                     generate_enemies()  # Gerar inimigos ao iniciar o jogo
     elif game_over:
         draw_game_over_screen()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r:
-                    game_over = False
-                    game_started = False
-                    player_points = 0
-                    player_money = 200  # Reset player money
-                    current_level = 1
-                    enemies = []
-                    enemy_queue = []
-                    towers = []
-                    enemy_spawn_timer = 0
+        game_over = False
+        game_started = False
+        player_points = 0
+        player_money = 300  # Reset player money
+        current_level = 1
+        enemies = []
+        enemy_queue = []
+        towers = []
+        enemy_spawn_timer = 0
     else:
         draw_background()  # Desenha o fundo das células das torres
         path = pathLevels.get(current_level, [])  # Atualiza o caminho para o nível atual
