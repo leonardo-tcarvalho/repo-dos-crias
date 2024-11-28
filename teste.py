@@ -57,6 +57,71 @@ EFFECT_IMAGE_3 = pygame.transform.scale(EFFECT_IMAGE_3, (40, 40))
 
 EFFECT_IMAGES = [EFFECT_IMAGE_1, EFFECT_IMAGE_2, EFFECT_IMAGE_3]
 
+# Imagens de decoração
+TRUNK_IMAGE = pygame.image.load("assets/decorations/trunk.png")
+TRUNK_IMAGE = pygame.transform.scale(TRUNK_IMAGE, (2 * CELL_SIZE, 2 * CELL_SIZE))
+TREE_IMAGE = pygame.image.load("assets/decorations/tree.png")
+TREE_IMAGE = pygame.transform.scale(TREE_IMAGE, (2 * CELL_SIZE, 2 * CELL_SIZE))
+ROCK_IMAGE = pygame.image.load("assets/decorations/rock.png")
+ROCK_IMAGE = pygame.transform.scale(ROCK_IMAGE, (2 * CELL_SIZE, 2 * CELL_SIZE))
+
+# Posições das decorações para cada fase
+decorations = {
+    1: [
+        (0 * CELL_SIZE - 1, 1 * CELL_SIZE - 1), 
+        (5 * CELL_SIZE - 1, 6 * CELL_SIZE - 1), 
+        (2 * CELL_SIZE - 1, 10 * CELL_SIZE - 1),
+        (10 * CELL_SIZE - 1, 10 * CELL_SIZE - 1),
+        (14 * CELL_SIZE - 1, 6 * CELL_SIZE - 1), 
+        (7 * CELL_SIZE - 1, 2 * CELL_SIZE - 1),
+        ],
+    2: [
+        (5 * CELL_SIZE - 1, 5 * CELL_SIZE - 1),
+        (2 * CELL_SIZE - 1, 1 * CELL_SIZE - 1),
+        (3 * CELL_SIZE - 1, 12 * CELL_SIZE - 1),
+        (14 * CELL_SIZE - 1, 2 * CELL_SIZE - 1),
+        (13 * CELL_SIZE - 1, 11 * CELL_SIZE - 1),
+        (17 * CELL_SIZE - 1, 14 * CELL_SIZE - 1)
+        ],
+    3: [
+        (14 * CELL_SIZE - 1, 1 * CELL_SIZE - 1),
+        (6 * CELL_SIZE - 1, 0 * CELL_SIZE - 1),
+        (2 * CELL_SIZE - 1, 9 * CELL_SIZE - 1),
+        (0 * CELL_SIZE - 1, 3 * CELL_SIZE - 1),
+        (9 * CELL_SIZE - 1, 8 * CELL_SIZE - 1),
+        (10 * CELL_SIZE - 1, 14 * CELL_SIZE - 1)
+        ],
+    4: [
+        (1 * CELL_SIZE - 1, 8 * CELL_SIZE - 1),
+        (6 * CELL_SIZE - 1, 1 * CELL_SIZE - 1),
+        (14 * CELL_SIZE - 1, 6 * CELL_SIZE - 1),
+        (8 * CELL_SIZE - 1, 4 * CELL_SIZE - 1),
+        (14 * CELL_SIZE - 1, 11 * CELL_SIZE - 1),
+        (10 * CELL_SIZE - 1, 9 * CELL_SIZE - 1),
+        (10 * CELL_SIZE - 1, 14 * CELL_SIZE - 1),
+        (7 * CELL_SIZE - 1, 11 * CELL_SIZE - 1)
+        ],
+    5: [
+        (2 * CELL_SIZE - 1, 7 * CELL_SIZE - 1),
+        (3 * CELL_SIZE - 1, 1 * CELL_SIZE - 1),
+        (7 * CELL_SIZE - 1, 5 * CELL_SIZE - 1),
+        (14 * CELL_SIZE - 1, 9 * CELL_SIZE - 1),
+        (13 * CELL_SIZE - 1, 4 * CELL_SIZE - 1),
+        (2 * CELL_SIZE - 1, 11 * CELL_SIZE - 1),
+        (10 * CELL_SIZE - 1, 14 * CELL_SIZE - 1),
+        (9 * CELL_SIZE - 1, 10 * CELL_SIZE - 1)
+        ],
+}
+
+
+
+
+def draw_decorations(level):
+    decoration_positions = decorations.get(level, [])
+    for i, (x, y) in enumerate(decoration_positions):
+        decoration_image = [TRUNK_IMAGE, TREE_IMAGE, ROCK_IMAGE][i % 3]
+        SCREEN.blit(decoration_image, (x, y))
+
 # Pontos e custos
 player_points = 0
 player_money = 300
@@ -132,6 +197,10 @@ pathLevels = {
         (17 * CELL_SIZE + 25, HEIGHT + 0)
     ]
 }
+
+
+
+
 
 # Classe Inimigo
 class Enemy:
@@ -397,6 +466,28 @@ def draw_game_over_screen():
     pygame.display.flip()
     pygame.time.wait(3000)  # Espera 3 segundos
 
+def draw_pause_button():
+    font = pygame.font.Font(None, 36)
+    text = font.render("PAUSE", True, WHITE)
+    text_rect = text.get_rect(topleft=(10, 10))
+    pygame.draw.rect(SCREEN, RED, text_rect.inflate(20, 20))  # Desenha um retângulo ao redor do texto
+    SCREEN.blit(text, text_rect)
+    return text_rect  # Retorna o retângulo do botão
+
+def draw_pause_screen():
+    SCREEN.fill(BLACK)
+    font = pygame.font.Font(None, 74)
+    text = font.render("PAUSADO", True, WHITE)
+    text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
+    SCREEN.blit(text, text_rect)
+    font_small = pygame.font.Font(None, 36)
+    continue_text = font_small.render("CONTINUAR", True, WHITE)
+    continue_rect = continue_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 50))
+    pygame.draw.rect(SCREEN, RED, continue_rect.inflate(20, 20))  # Desenha um retângulo ao redor do texto
+    SCREEN.blit(continue_text, continue_rect)
+    pygame.display.flip()
+    return continue_rect  # Retorna o retângulo do botão
+
 # Inicializar lista de inimigos, fila de inimigos e torres
 enemies = []
 enemy_queue = []
@@ -410,11 +501,13 @@ dragging_tower = False
 dragged_tower_cost = None
 dragged_tower_image = None
 
-# Loop principal do jogo
+# Variáveis de estado do jogo
 running = True
 game_started = False
 game_over = False
+paused = False
 
+# Loop principal do jogo
 while running:
     if not game_started:
         start_button_rect = draw_start_screen()
@@ -437,23 +530,38 @@ while running:
         enemy_queue = []
         towers = []
         enemy_spawn_timer = 0
+    elif paused:
+        continue_button_rect = draw_pause_screen()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                if continue_button_rect.collidepoint(mouse_x, mouse_y):
+                    paused = False
     else:
         draw_background()  # Desenha o fundo das células das torres
+        draw_decorations(current_level)  # Desenha as decorações para o nível atual
         path = pathLevels.get(current_level, [])  # Atualiza o caminho para o nível atual
         # Remova a linha preta no caminho do path
         # for i in range(len(path) - 1):
         #     pygame.draw.line(SCREEN, ROAD_COLOR, path[i], path[i + 1], 10)
 
         # Desenhar a grade e verificar eventos
-        for x in range(0, WIDTH - 200, CELL_SIZE):  # Ajusta a largura da grade para 18 células
-            pygame.draw.line(SCREEN, WHITE, (x, 0), (x, HEIGHT))
-        for y in range(0, HEIGHT, CELL_SIZE):
-            pygame.draw.line(SCREEN, WHITE, (0, y), (WIDTH - 200, y))  # Ajusta a largura da grade para 18 células
+        # Remova as linhas brancas que separam as células
+        # for x in range(0, WIDTH - 200, CELL_SIZE):  # Ajusta a largura da grade para 18 células
+        #     pygame.draw.line(SCREEN, WHITE, (x, 0), (x, HEIGHT))
+        # for y in range(0, HEIGHT, CELL_SIZE):
+        #     pygame.draw.line(SCREEN, WHITE, (0, y), (WIDTH - 200, y))  # Ajusta a largura da grade para 18 células
 
+        pause_button_rect = draw_pause_button()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                if pause_button_rect.collidepoint(mouse_x, mouse_y):
+                    paused = True
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 grid_x, grid_y = mouse_x // CELL_SIZE, mouse_y // CELL_SIZE
 
