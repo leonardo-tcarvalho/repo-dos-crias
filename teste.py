@@ -413,6 +413,11 @@ def is_cell_free(x, y):
         elif start_y == end_y:  # Horizontal path
             if start_y // CELL_SIZE == y and min(start_x, end_x) // CELL_SIZE <= x <= max(start_x, end_x) // CELL_SIZE:
                 return False
+    # Verifica se a célula está ocupada por uma decoração
+    decoration_positions = decorations.get(current_level, [])
+    for decoration_x, decoration_y in decoration_positions:
+        if decoration_x // CELL_SIZE == x and decoration_y // CELL_SIZE == y:
+            return False
     return True
 
 def draw_background():
