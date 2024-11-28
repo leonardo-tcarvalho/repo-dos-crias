@@ -416,7 +416,8 @@ def is_cell_free(x, y):
     # Verifica se a célula está ocupada por uma decoração
     decoration_positions = decorations.get(current_level, [])
     for decoration_x, decoration_y in decoration_positions:
-        if decoration_x // CELL_SIZE == x and decoration_y // CELL_SIZE == y:
+        if (decoration_x // CELL_SIZE + 1 <= x < (decoration_x + 2 * CELL_SIZE) // CELL_SIZE + 1 and
+            decoration_y // CELL_SIZE + 1 <= y < (decoration_y + 2 * CELL_SIZE) // CELL_SIZE + 1):
             return False
     return True
 
@@ -458,9 +459,9 @@ def draw_game_over_screen():
     font_main = pygame.font.Font(None, 74)
     font_sub = pygame.font.Font(None, 24)  # 33% do tamanho da frase principal
     phrases = [
-        "TENTA DENOVO OUTRO DIA SEU RUIM",
+        "TU É RUIM ASSIM OU FEZ CURSO?",
         "É MAIS FACIL DESINSTALAR O JOGO",
-        "TÁ JOGANDO COM O PÉ AMIGÃO?"
+        "TÁ JOGANDO COM O PÉ AMIGÃO?",
     ]
     main_text = font_main.render("VOCÊ PERDEU", True, RED)
     sub_text = font_sub.render(random.choice(phrases), True, RED)
@@ -559,7 +560,6 @@ while running:
         # for y in range(0, HEIGHT, CELL_SIZE):
         #     pygame.draw.line(SCREEN, WHITE, (0, y), (WIDTH - 200, y))  # Ajusta a largura da grade para 18 células
 
-        pause_button_rect = draw_pause_button()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -632,6 +632,9 @@ while running:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             tower_rect = dragged_tower_image.get_rect(center=(mouse_x, mouse_y))
             SCREEN.blit(dragged_tower_image, tower_rect)
+
+        # Desenhar botão de pausa por último para garantir que esteja no topo
+        pause_button_rect = draw_pause_button()
 
         pygame.display.flip()
         CLOCK.tick(FPS)
