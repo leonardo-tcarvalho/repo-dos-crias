@@ -365,11 +365,12 @@ def draw_background():
 
 def draw_start_screen():
     SCREEN.fill(BLACK)
-    enemy_images = [ENEMY_IMAGE_1, ENEMY_IMAGE_2, ENEMY_IMAGE_3]
-    for x in range(0, WIDTH, 50):
-        for y in range(0, HEIGHT, 50):
-            enemy_image = random.choice(enemy_images)
-            SCREEN.blit(enemy_image, (x, y))
+    # Remove the enemy images from the start screen
+    # enemy_images = [ENEMY_IMAGE_1, ENEMY_IMAGE_2, ENEMY_IMAGE_3]
+    # for x in range(0, WIDTH, 50):
+    #     for y in range(0, HEIGHT, 50):
+    #         enemy_image = random.choice(enemy_images)
+    #         SCREEN.blit(enemy_image, (x, y))
     font = pygame.font.Font(None, 74)
     text = font.render("JOGAR", True, WHITE)
     text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
