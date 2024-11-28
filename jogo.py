@@ -2,6 +2,8 @@ import pygame
 import sys
 import math
 import random
+import os
+
 
 # Inicialização do Pygame
 pygame.init()
@@ -26,44 +28,84 @@ PURPLE = (128, 0, 128) # Torre tipo 3
 CYAN = (0, 255, 255)   # Torre tipo 4
 MAGENTA = (255, 0, 255) # Torre tipo 5
 
+def resource_path(relative_path):
+    try:
+        # PyInstaller cria uma pasta temporária e armazena o caminho nela
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+# Exemplo de carregamento de imagem
+ENEMY_IMAGE_1 = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/enemies/enemy-1.png")),
+    (25, 25)
+)
+ENEMY_IMAGE_2 = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/enemies/enemy-2.png")),
+    (35, 35)
+)
+ENEMY_IMAGE_3 = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/enemies/enemy-3.png")),
+    (45, 45)
+)
+
 # Imagens
-TOWER_IMAGE_1 = pygame.image.load("assets/towers/tower-1.png")
-TOWER_IMAGE_1 = pygame.transform.scale(TOWER_IMAGE_1, (30, 30))
-TOWER_IMAGE_2 = pygame.image.load("assets/towers/tower-2.png")
-TOWER_IMAGE_2 = pygame.transform.scale(TOWER_IMAGE_2, (30, 30))
-TOWER_IMAGE_3 = pygame.image.load("assets/towers/tower-3.png")
-TOWER_IMAGE_3 = pygame.transform.scale(TOWER_IMAGE_3, (30, 30))
+TOWER_IMAGE_1 = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/towers/tower-1.png")),
+    (30, 30)
+)
+TOWER_IMAGE_2 = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/towers/tower-2.png")),
+    (30, 30)
+)
+TOWER_IMAGE_3 = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/towers/tower-3.png")),
+    (30, 30)
+)
 
-ENEMY_IMAGE_1 = pygame.image.load("assets/enemys/enemy-1.png")
-ENEMY_IMAGE_1 = pygame.transform.scale(ENEMY_IMAGE_1, (30, 30))
-ENEMY_IMAGE_2 = pygame.image.load("assets/enemys/enemy-2.png")
-ENEMY_IMAGE_2 = pygame.transform.scale(ENEMY_IMAGE_2, (40, 40))
-ENEMY_IMAGE_3 = pygame.image.load("assets/enemys/enemy-3.png")
-ENEMY_IMAGE_3 = pygame.transform.scale(ENEMY_IMAGE_3, (50, 50))
+BULLET_IMAGE_1 = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/bullets/bullet-1.png")),
+    (10, 10)
+)
+BULLET_IMAGE_2 = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/bullets/bullet-2.png")),
+    (10, 10)
+)
+BULLET_IMAGE_3 = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/bullets/bullet-3.png")),
+    (10, 10)
+)
 
-BULLET_IMAGE_1 = pygame.image.load("assets/bullets/bullet-1.png")
-BULLET_IMAGE_1 = pygame.transform.scale(BULLET_IMAGE_1, (10, 10))
-BULLET_IMAGE_2 = pygame.image.load("assets/bullets/bullet-2.png")
-BULLET_IMAGE_2 = pygame.transform.scale(BULLET_IMAGE_2, (10, 10))
-BULLET_IMAGE_3 = pygame.image.load("assets/bullets/bullet-3.png")
-BULLET_IMAGE_3 = pygame.transform.scale(BULLET_IMAGE_3, (10, 10))
-
-EFFECT_IMAGE_1 = pygame.image.load("assets/effect_bullet/effect-1.png")
-EFFECT_IMAGE_1 = pygame.transform.scale(EFFECT_IMAGE_1, (40, 40))
-EFFECT_IMAGE_2 = pygame.image.load("assets/effect_bullet/effect-2.png")
-EFFECT_IMAGE_2 = pygame.transform.scale(EFFECT_IMAGE_2, (40, 40))
-EFFECT_IMAGE_3 = pygame.image.load("assets/effect_bullet/effect-3.png")
-EFFECT_IMAGE_3 = pygame.transform.scale(EFFECT_IMAGE_3, (40, 40))
+EFFECT_IMAGE_1 = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/effect_bullet/effect-1.png")),
+    (40, 40)
+)
+EFFECT_IMAGE_2 = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/effect_bullet/effect-2.png")),
+    (40, 40)
+)
+EFFECT_IMAGE_3 = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/effect_bullet/effect-3.png")),
+    (40, 40)
+)
 
 EFFECT_IMAGES = [EFFECT_IMAGE_1, EFFECT_IMAGE_2, EFFECT_IMAGE_3]
 
 # Imagens de decoração
-TRUNK_IMAGE = pygame.image.load("assets/decorations/trunk.png")
-TRUNK_IMAGE = pygame.transform.scale(TRUNK_IMAGE, (2 * CELL_SIZE, 2 * CELL_SIZE))
-TREE_IMAGE = pygame.image.load("assets/decorations/tree.png")
-TREE_IMAGE = pygame.transform.scale(TREE_IMAGE, (2 * CELL_SIZE, 2 * CELL_SIZE))
-ROCK_IMAGE = pygame.image.load("assets/decorations/rock.png")
-ROCK_IMAGE = pygame.transform.scale(ROCK_IMAGE, (2 * CELL_SIZE, 2 * CELL_SIZE))
+TRUNK_IMAGE = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/decorations/trunk.png")),
+    (2 * CELL_SIZE, 2 * CELL_SIZE)
+)
+TREE_IMAGE = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/decorations/tree.png")),
+    (2 * CELL_SIZE, 2 * CELL_SIZE)
+)
+ROCK_IMAGE = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/decorations/rock.png")),
+    (2 * CELL_SIZE, 2 * CELL_SIZE)
+)
 
 # Posições das decorações para cada fase
 decorations = {
@@ -124,7 +166,8 @@ def draw_decorations(level):
 
 # Pontos e custos
 player_points = 0
-player_money = 300
+starting_money = {1: 400, 2: 600, 3: 800, 4: 1000, 5: 1400}  # Starting money for each level
+player_money = starting_money[1]  # Inicializa com o dinheiro do nível 1
 reward_enemy = [75, 150, 300]  # Update rewards for killing enemies
 tower_costs = [50, 100, 200]
 points_enemy = [50, 100, 200]
@@ -132,13 +175,16 @@ available_towers = float('inf')
 current_level = 1  # Inicializa o nível atual como 1
 
 # Níveis de dificuldade
-qtdEnemysPerlevel = {
+qtdenemiesPerlevel = {
     1: (30, 5, 2),
-    2: (60, 15, 6),
-    3: (100, 30, 9),
-    4: (160, 45, 12),
-    5: (200, 60, 20),
+    2: (60, 15, 8),
+    3: (100, 30, 14),
+    4: (160, 45, 24),
+    5: (200, 60, 40),
 }
+
+
+
 
 # Caminho para os inimigos
 pathLevels = {
@@ -197,17 +243,12 @@ pathLevels = {
         (17 * CELL_SIZE + 25, HEIGHT + 0)
     ]
 }
-
-
-
-
-
 # Classe Inimigo
 class Enemy:
-    def __init__(self, path, difficulty):
+    def __init__(self, path, difficulty, level):
         self.path = path
         self.x, self.y = path[0]
-        self.speed = 1
+        self.speed = 1 + 0.1 * level  # Increase speed with level
         self.health = 100
         self.current_point = 0
         self.difficulty = difficulty
@@ -338,11 +379,18 @@ class Tower:
             self.timer -= 1
         self.projectiles = [p for p in self.projectiles if not p.move()]
 
-# Funções auxiliares
-BACKGROUND_IMAGE = pygame.image.load("assets/backgrounds/backgroundTowers.png")
-BACKGROUND_IMAGE = pygame.transform.scale(BACKGROUND_IMAGE, (CELL_SIZE, CELL_SIZE))
-PATH_BACKGROUND_IMAGE = pygame.image.load("assets/backgrounds/backgroundPath.png")
-PATH_BACKGROUND_IMAGE = pygame.transform.scale(PATH_BACKGROUND_IMAGE, (CELL_SIZE, CELL_SIZE))
+
+BACKGROUND_IMAGE = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/backgrounds/backgroundTowers.png")),
+    (CELL_SIZE, CELL_SIZE)
+)
+
+PATH_BACKGROUND_IMAGE = pygame.transform.scale(
+    pygame.image.load(resource_path("assets/backgrounds/backgroundPath.png")),
+    (CELL_SIZE, CELL_SIZE)
+)
+
+
 
 def draw_menu():
     menu_width = 200
@@ -355,7 +403,6 @@ def draw_menu():
     # SCREEN.blit(lives_text, (WIDTH - menu_width + 10, 50))
 
     for i, cost in enumerate(tower_costs):
-        color = BLUE if cost == 50 else MAGENTA if cost == 100 else YELLOW if cost == 200 else CYAN
         tower_image = TOWER_IMAGE_1 if cost == 50 else TOWER_IMAGE_2 if cost == 100 else TOWER_IMAGE_3
         tower_rect = tower_image.get_rect(center=(WIDTH - menu_width // 1.3, 150 + i * 100))
         pygame.draw.rect(SCREEN, WHITE, tower_rect.inflate(10, 10), border_radius=5)  # Desenha um retângulo ao redor da torre
@@ -365,13 +412,13 @@ def draw_menu():
 
 def generate_enemies():
     global player_money, enemy_queue, enemy_spawn_timer  # Add this line to modify the global variable
-    player_money = 300  # Reset player money at the start of each round
-    f, m, d = qtdEnemysPerlevel[current_level]
+    player_money = starting_money[current_level]  # Set player money based on the current level
+    f, m, d = qtdenemiesPerlevel[current_level]
     difficulty_counts = [(1, f), (2, m), (3, d)]
     enemy_list = []
     for difficulty, count in difficulty_counts:
         for _ in range(count):
-            enemy_list.append(Enemy(pathLevels[current_level], difficulty))
+            enemy_list.append(Enemy(pathLevels[current_level], difficulty, current_level))
     random.shuffle(enemy_list)  # Shuffle the enemies to randomize their order
     # Ensure the strongest enemy is not first
     if enemy_list and enemy_list[0].difficulty == 3:
@@ -494,6 +541,18 @@ def draw_pause_screen():
     pygame.display.flip()
     return continue_rect  # Retorna o retângulo do botão
 
+def draw_completion_screen():
+    SCREEN.fill(BLACK)
+    font = pygame.font.Font(None, 74)
+    text1 = font.render("VOCÊ ZEROU O JOGO", True, GREEN)
+    text2 = font.render("PARABÉNS!", True, GREEN)
+    text1_rect = text1.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 40))
+    text2_rect = text2.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 40))
+    SCREEN.blit(text1, text1_rect)
+    SCREEN.blit(text2, text2_rect)
+    pygame.display.flip()
+    pygame.time.wait(3000)  # Espera 3 segundos
+
 # Inicializar lista de inimigos, fila de inimigos e torres
 enemies = []
 enemy_queue = []
@@ -546,12 +605,9 @@ while running:
                 if continue_button_rect.collidepoint(mouse_x, mouse_y):
                     paused = False
     else:
-        draw_background()  # Desenha o fundo das células das torres
-        draw_decorations(current_level)  # Desenha as decorações para o nível atual
-        path = pathLevels.get(current_level, [])  # Atualiza o caminho para o nível atual
-        # Remova a linha preta no caminho do path
-        # for i in range(len(path) - 1):
-        #     pygame.draw.line(SCREEN, ROAD_COLOR, path[i], path[i + 1], 10)
+        draw_background()
+        draw_decorations(current_level)
+        path = pathLevels.get(current_level, [])
 
         # Desenhar a grade e verificar eventos
         # Remova as linhas brancas que separam as células
@@ -621,6 +677,7 @@ while running:
                     towers = []  # Remove todas as torres
                     generate_enemies()  # Gerar inimigos para o próximo nível
                 else:
+                    draw_completion_screen()  # Exibe a mensagem de conclusão
                     running = False  # Fim do jogo, todos os níveis completados
             enemy_spawn_timer = 0
 
@@ -641,3 +698,5 @@ while running:
 
 pygame.quit()
 sys.exit()
+
+
